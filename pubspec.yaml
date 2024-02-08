@@ -1,7 +1,7 @@
 name: assets_inserter
 description: "AssetsInserter automates adding asset paths to Flutter code with using templates."
-version: 0.0.2
-homepage:
+version: 0.0.3
+homepage: https://github.com/DaaGER/assets_inserter
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
