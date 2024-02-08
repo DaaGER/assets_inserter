@@ -41,13 +41,3 @@ class MyApp {
   final String path = "assets/images/logo.png";
 }
 ```
-
-From
-```dart
-class MyApp {
-  final List<String> images = ["assets/images/pic[0:2].png"];
-  final String path = "assets/images/logo.png";
-}
-
-```
-
