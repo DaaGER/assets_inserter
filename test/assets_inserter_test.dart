@@ -22,4 +22,17 @@ return [
     final updatedContent = replaceAssetString(originalContent);
     expect(updatedContent, expectedContent);
   });
+
+  test('path with directory', () {
+    const String originalContent = 'return ["assets///"];';
+
+    const String expectedContent = '''
+return [
+\t"assets/1.png",
+\t"assets/2.png",
+\t"assets/3.png"
+];''';
+    final updatedContent = replaceAssetString(originalContent);
+    expect(updatedContent, expectedContent);
+  });
 }

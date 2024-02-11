@@ -17,9 +17,10 @@ To use AssetsInserter, navigate to the root directory of your Flutter project an
 dart assets_inserter.dart:replace
 ```
 
-This command will recursively search for Dart files in the lib directory of your project, find asset path strings matching a specified pattern (e.g., ["assets/images/pic[000:002].png"]), and replace them with arrays of image paths. The script supports leading zeros in the range specified within the square brackets.
+This command will recursively search for Dart files in the lib directory of your project, find asset path strings matching a specified pattern (e.g., ["assets/images/pic[000:002].png"])?, for dir(e.g., ["assets////"]), and replace them with arrays of image paths. The script supports leading zeros in the range specified within the square brackets.
 
 ## Example
+
 
 From
 ```dart
@@ -39,5 +40,24 @@ class MyApp {
     "assets/images/pic02.png"
   ];
   final String path = "assets/images/logo.png";
+}
+```
+
+From
+```dart
+class MyApp {
+  final List<String> images = ["assets///"];
+}
+
+```
+
+To
+```dart
+class MyApp {
+  final List<String> images = [
+    "assets/1.png",
+    "assets/2.png",
+    "assets/3.png"
+  ];
 }
 ```

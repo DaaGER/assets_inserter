@@ -33,16 +33,27 @@ void processFile(File file) {
 
 /// Функция для замены строк с путем к ресурсу на массивы путей
 String replaceAssetString(String line) {
-  // Регулярное выражение для поиска строк вида `["assets/image/pic.png"]`
-  final RegExp regex = RegExp(r'\[(".*\[*\].*")\]');
+  //Поиск файлов по маске
+  final RegExp regexOne = RegExp(r'\[(".*\[*\].*")\]');
+  if (regexOne.hasMatch(line)) {
+    String replacedLine = line.replaceAllMapped(regexOne, (match) {
+      final replacedString = processAssetString(match.group(1)!);
+      return replacedString;
+    });
+    return replacedLine;
+  }
 
-  // Замена найденной строки на результат обработки
-  final replacedLine = line.replaceAllMapped(regex, (match) {
-    final replacedString = processAssetString(match.group(1)!);
-    return replacedString;
-  });
+  //Поиск файлов в папке
+  final RegExp regexDir = RegExp(r'\["(.*\/)\/\/"\]');
+  if (regexDir.hasMatch(line)) {
+    String replacedLine = line.replaceAllMapped(regexDir, (match) {
+      final replacedString = processAssetStringDir(match.group(1)!);
+      return replacedString;
+    });
+    return replacedLine;
+  }
 
-  return replacedLine;
+  return line;
 }
 
 /// Функция для обработки строки с путем к ресурсу и генерации массива путей
@@ -70,4 +81,36 @@ String processAssetString(String assetString) {
     assetString = "[\n${result.join(",\n")}\n]"; // Сборка обновленной строки
   }
   return assetString;
+}
+
+/// Функция для обработки строки с путем к папке и генерации массива путей
+String processAssetStringDir(String assetString) {
+  List<String> files = listFiles(assetString);
+  List<String> result = [];
+  files.forEach((file) {
+    result.add(file);
+  });
+
+  assetString = '[\n\t"${result.join('",\n\t"')}"\n]';
+
+  return assetString;
+}
+
+/// Получаем список файлов в указанной директории
+List<String> listFiles(String directory) {
+  List<String> result = [];
+  try {
+    final files = Directory(directory);
+
+    files.listSync(recursive: false, followLinks: false).forEach((file) {
+      if (file is File) {
+        result.add(file.path);
+      }
+    });
+    result.sort((String a, String b) => a.compareTo(b));
+  } on PathNotFoundException {
+    print('Такой папки нет - $directory');
+  }
+
+  return result;
 }
